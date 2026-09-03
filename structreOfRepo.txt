@@ -1,0 +1,225 @@
+Folder PATH listing for volume Windows-SSD
+Volume serial number is 00000019 8228:56E6
+C:.
+¦   .env.example
+¦   .gitignore
+¦   docker-compose.yml
+¦   LICENSE
+¦   Makefile
+¦   pyproject.toml
+¦   README.md
+¦   structreOfRepo.txt
+¦   
++---backend
+¦   +---src
+¦       +---sih26155
+¦           +---ai
+¦           ¦   +---confidence
+¦           ¦   ¦       scorer.py
+¦           ¦   ¦       
+¦           ¦   +---learning
+¦           ¦   ¦       approval.py
+¦           ¦   ¦       mapping_store.py
+¦           ¦   ¦       versioning.py
+¦           ¦   ¦       
+¦           ¦   +---retrieval
+¦           ¦   ¦       mapping_index.py
+¦           ¦   ¦       retriever.py
+¦           ¦   ¦       
+¦           ¦   +---semantic_mapping
+¦           ¦           candidate_generator.py
+¦           ¦           prompts.py
+¦           ¦           resolver.py
+¦           ¦           
+¦           +---api
+¦           ¦   ¦   dependencies.py
+¦           ¦   ¦   main.py
+¦           ¦   ¦   
+¦           ¦   +---routes
+¦           ¦           analysis.py
+¦           ¦           findings.py
+¦           ¦           reports.py
+¦           ¦           training.py
+¦           ¦           
+¦           +---compliance
+¦           ¦   +---evaluator
+¦           ¦   ¦       engine.py
+¦           ¦   ¦       evidence.py
+¦           ¦   ¦       operators.py
+¦           ¦   ¦       
+¦           ¦   +---frameworks
+¦           ¦   ¦   +---cis
+¦           ¦   ¦   ¦       controls.py
+¦           ¦   ¦   ¦       
+¦           ¦   ¦   +---nist
+¦           ¦   ¦   ¦       controls.py
+¦           ¦   ¦   ¦       
+¦           ¦   ¦   +---stig
+¦           ¦   ¦           controls.py
+¦           ¦   ¦           
+¦           ¦   +---policy
+¦           ¦   ¦       loader.py
+¦           ¦   ¦       models.py
+¦           ¦   ¦       
+¦           ¦   +---risk
+¦           ¦           scorer.py
+¦           ¦           severity.py
+¦           ¦           
+¦           +---core
+¦           ¦   +---contracts
+¦           ¦   ¦       ai.py
+¦           ¦   ¦       compliance.py
+¦           ¦   ¦       parser.py
+¦           ¦   ¦       remediation.py
+¦           ¦   ¦       
+¦           ¦   +---evidence
+¦           ¦   ¦       extractor.py
+¦           ¦   ¦       models.py
+¦           ¦   ¦       
+¦           ¦   +---facts
+¦           ¦   ¦       builder.py
+¦           ¦   ¦       models.py
+¦           ¦   ¦       
+¦           ¦   +---pipeline
+¦           ¦   ¦       analyze.py
+¦           ¦   ¦       stages.py
+¦           ¦   ¦       
+¦           ¦   +---schema
+¦           ¦           enums.py
+¦           ¦           models.py
+¦           ¦           validators.py
+¦           ¦           
+¦           +---ingestion
+¦           ¦   +---collectors
+¦           ¦   ¦       napalm_collector.py
+¦           ¦   ¦       netmiko_collector.py
+¦           ¦   ¦       
+¦           ¦   +---detection
+¦           ¦   ¦       vendor_detector.py
+¦           ¦   ¦       
+¦           ¦   +---loaders
+¦           ¦           archive_loader.py
+¦           ¦           file_loader.py
+¦           ¦           
+¦           +---parsers
+¦           ¦   +---base
+¦           ¦   ¦       context.py
+¦           ¦   ¦       parser.py
+¦           ¦   ¦       result.py
+¦           ¦   ¦       
+¦           ¦   +---cisco
+¦           ¦   ¦       ios.py
+¦           ¦   ¦       iosxe.py
+¦           ¦   ¦       
+¦           ¦   +---generic
+¦           ¦   ¦       fallback.py
+¦           ¦   ¦       
+¦           ¦   +---juniper
+¦           ¦   ¦       junos.py
+¦           ¦   ¦       
+¦           ¦   +---paloalto
+¦           ¦           panos.py
+¦           ¦           
+¦           +---remediation
+¦           ¦       generator.py
+¦           ¦       models.py
+¦           ¦       registry.py
+¦           ¦       validators.py
+¦           ¦       
+¦           +---reporting
+¦           ¦   ¦   models.py
+¦           ¦   ¦   
+¦           ¦   +---executive
+¦           ¦   ¦       template.html
+¦           ¦   ¦       
+¦           ¦   +---pdf
+¦           ¦   ¦       generator.py
+¦           ¦   ¦       
+¦           ¦   +---technical
+¦           ¦           template.html
+¦           ¦           
+¦           +---storage
+¦               ¦   database.py
+¦               ¦   repositories.py
+¦               ¦   
+¦               +---migrations
++---data
+¦   +---configs
+¦   ¦   +---cisco
+¦   ¦   +---juniper
+¦   ¦   +---paloalto
+¦   ¦   +---unknown
+¦   +---mappings
+¦   ¦   +---learned
+¦   ¦   +---vendor
+¦   +---policies
+¦   ¦   +---cis
+¦   ¦   +---nist
+¦   ¦   +---stig
+¦   +---remediation
+¦   ¦   +---cisco
+¦   ¦   +---juniper
+¦   ¦   +---paloalto
+¦   +---schemas
+¦       +---sbm
++---docs
+¦   +---architecture
+¦   ¦   ¦   data-flow.md
+¦   ¦   ¦   end-to-end-flow.md
+¦   ¦   ¦   module-boundaries.md
+¦   ¦   ¦   sbm.md
+¦   ¦   ¦   system-architecture.md
+¦   ¦   ¦   
+¦   ¦   +---decisions
+¦   ¦           ADR-001-canonical-sbm.md
+¦   ¦           ADR-002-ai-boundary.md
+¦   ¦           ADR-003-remediation-safety.md
+¦   ¦           
+¦   +---compliance
+¦   ¦       control-model.md
+¦   ¦       framework-mapping.md
+¦   ¦       
+¦   +---demo
+¦   ¦       demo-flow.md
+¦   ¦       demo-script.md
+¦   ¦       
+¦   +---vendors
+¦           cisco.md
+¦           juniper.md
+¦           paloalto.md
+¦           
++---frontend
+¦   +---public
+¦   +---src
+¦       +---api
+¦       +---app
+¦       +---components
+¦       +---features
+¦       ¦   +---analysis
+¦       ¦   +---findings
+¦       ¦   +---reports
+¦       ¦   +---training
+¦       ¦   +---upload
+¦       +---types
++---scripts
++---tests
+    +---e2e
+    ¦   +---full_pipeline
+    +---fixtures
+    ¦   +---cisco
+    ¦   +---juniper
+    ¦   +---paloalto
+    ¦   +---unknown
+    +---integration
+    ¦   +---ai_to_sbm
+    ¦   +---compliance_to_remediation
+    ¦   +---parser_to_sbm
+    ¦   +---sbm_to_compliance
+    +---unit
+        +---ai
+        +---compliance
+        +---core
+        +---ingestion
+        +---parsers
+        +---remediation
+        +---reporting
