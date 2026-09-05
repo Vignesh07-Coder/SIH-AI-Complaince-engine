@@ -1,23 +1,19 @@
-from pathlib import Path
 import json
+from pathlib import Path
+from datetime import datetime, timezone
+
+LEARNED_DIR = Path("data/mappings/learned")
 
 
-class MappingStore:
-    def __init__(self, storage_dir: str = "data/mappings/learned"):
-        self.storage_dir = Path(storage_dir)
-        self.storage_dir.mkdir(parents=True, exist_ok=True)
+def save_approved_mapping(mapping: dict) -> None:
+    LEARNED_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%f")
+    safe_field = mapping["field"].replace(".", "_")
+    filename = LEARNED_DIR / f"{safe_field}_{timestamp}.json"
+    filename.write_text(json.dumps(mapping, indent=2))
 
-    def save_mapping(self, mapping: dict, mapping_id: str) -> None:
-        file_path = self.storage_dir / f"{mapping_id}.json"
 
-        with file_path.open("w", encoding="utf-8") as file:
-            json.dump(mapping, file, indent=2)
-
-    def load_mapping(self, mapping_id: str) -> dict | None:
-        file_path = self.storage_dir / f"{mapping_id}.json"
-
-        if not file_path.exists():
-            return None
-
-        with file_path.open("r", encoding="utf-8") as file:
-            return json.load(file)
+def load_all_learned() -> list[dict]:
+    if not LEARNED_DIR.exists():
+        return []
+    return [json.loads(f.read_text()) for f in LEARNED_DIR.glob("*.json")]

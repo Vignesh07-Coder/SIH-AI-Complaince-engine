@@ -1,0 +1,7 @@
+[
+  {
+    "source_text": "ip ssh version 2",
+    "field": "management.ssh.version",
+    "value": 2
+  }
+]

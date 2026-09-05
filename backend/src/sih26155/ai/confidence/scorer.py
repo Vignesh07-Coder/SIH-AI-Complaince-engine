@@ -1,7 +1,16 @@
-def score_candidate(candidate: dict, similar_examples: list[dict]) -> float:
+from sih26155.core.contracts.ai import CandidateMapping
+
+
+def score_candidate(
+    candidate: CandidateMapping,
+    similar_examples: list[tuple[dict, float]],
+) -> float:
+    """
+    Converts retrieval evidence into a confidence score.
+    Never returns 1.0 — the system should never claim total certainty.
+    """
     if not similar_examples:
         return 0.2
 
-    confidence = 0.5 + (0.1 * min(len(similar_examples), 4))
-
-    return min(confidence, 0.9)
+    _, top_similarity = similar_examples[0]
+    return round(min(top_similarity, 0.98), 2)

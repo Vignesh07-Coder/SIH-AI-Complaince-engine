@@ -1,30 +1,57 @@
+import json
+from pathlib import Path
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+_MODEL_NAME = "all-MiniLM-L6-v2"
+_model = None
+
+
+def _get_model():
+    global _model
+    if _model is None:
+        _model = SentenceTransformer(_MODEL_NAME)
+    return _model
+
+
 class MappingIndex:
-    def __init__(self):
-        self._mappings: list[dict] = []
+    """
+    Loads all known mappings (vendor + learned) and computes real
+    sentence embeddings for semantic similarity search.
+    """
 
-    def add_mapping(self, mapping: dict) -> None:
-        self._mappings.append(mapping)
+    def __init__(self, vendor_dir: str, learned_dir: str):
+        self._entries: list[dict] = []
+        self._load(vendor_dir)
+        self._load(learned_dir)
+        self._embeddings = self._compute_embeddings()
 
-    def find_similar(
-        self,
-        unknown_text: str,
-        top_k: int = 3,
-    ) -> list[dict]:
-        if not self._mappings:
-            return []
+    def _load(self, directory: str):
+        path = Path(directory)
+        if not path.exists():
+            return
+        for file in path.glob("*.json"):
+            try:
+                data = json.loads(file.read_text())
+            except json.JSONDecodeError:
+                continue
+            self._entries.extend(data if isinstance(data, list) else [data])
 
-        matches = []
-        unknown_words = set(unknown_text.lower().split())
+    def _compute_embeddings(self):
+        if not self._entries:
+            return np.zeros((0, 384))
+        texts = [e.get("source_text", "") for e in self._entries]
+        model = _get_model()
+        return model.encode(texts, convert_to_numpy=True)
 
-        for mapping in self._mappings:
-            known_text = mapping.get("unknown_text", "")
-            known_words = set(known_text.lower().split())
+    def all_entries(self) -> list[dict]:
+        return self._entries
 
-            score = len(unknown_words & known_words)
+    def embeddings(self):
+        return self._embeddings
 
-            if score > 0:
-                matches.append((score, mapping))
-
-        matches.sort(key=lambda item: item[0], reverse=True)
-
-        return [mapping for _, mapping in matches[:top_k]]
+    def reload(self, vendor_dir: str, learned_dir: str):
+        self._entries = []
+        self._load(vendor_dir)
+        self._load(learned_dir)
+        self._embeddings = self._compute_embeddings()
