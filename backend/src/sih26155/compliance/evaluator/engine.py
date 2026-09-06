@@ -1,4 +1,4 @@
-```python
+
 from dataclasses import asdict, dataclass
 from typing import Any, Literal
 
@@ -106,4 +106,4 @@ class ComplianceEvaluator:
             self.evaluate_rule(sbm, rule)
             for rule in policy.rules
         ]
-```
+
