@@ -1,14 +1,15 @@
 from typing import Optional
 
 from .models import Remediation
+from .validators import RemediationValidator
 
 
 class RemediationRegistry:
     """
     Registry of validated vendor-specific remediation commands.
 
+    Remediation records are validated before they are stored.
     The compliance engine remains vendor-neutral.
-    Vendor-specific commands are stored here.
     """
 
     def __init__(self) -> None:
@@ -17,18 +18,42 @@ class RemediationRegistry:
             Remediation,
         ] = {}
 
+    @staticmethod
+    def _make_key(
+        vendor: str,
+        platform: str,
+        control_id: str,
+    ) -> tuple[str, str, str]:
+        """
+        Create a normalized registry key.
+        """
+
+        return (
+            vendor.strip().lower(),
+            platform.strip().lower(),
+            control_id.strip().upper(),
+        )
+
     def register(self, remediation: Remediation) -> None:
         """
-        Register a remediation command.
+        Validate and register a remediation command.
 
-        Key:
-            (vendor, platform, control_id)
+        Raises:
+            RemediationValidationError:
+                If the remediation is invalid.
+
+            ValueError:
+                If a remediation already exists for the
+                same vendor, platform and control.
         """
 
-        key = (
-            remediation.vendor.lower(),
-            remediation.platform.lower(),
-            remediation.control_id.upper(),
+        # Validate before storing.
+        RemediationValidator.validate(remediation)
+
+        key = self._make_key(
+            vendor=remediation.vendor,
+            platform=remediation.platform,
+            control_id=remediation.control_id,
         )
 
         if key in self._remediations:
@@ -48,13 +73,16 @@ class RemediationRegistry:
         control_id: str,
     ) -> Optional[Remediation]:
         """
-        Retrieve a remediation for a vendor, platform and control.
+        Retrieve a remediation.
+
+        Returns:
+            Remediation if found, otherwise None.
         """
 
-        key = (
-            vendor.lower(),
-            platform.lower(),
-            control_id.upper(),
+        key = self._make_key(
+            vendor=vendor,
+            platform=platform,
+            control_id=control_id,
         )
 
         return self._remediations.get(key)
@@ -69,7 +97,8 @@ class RemediationRegistry:
         Retrieve a remediation.
 
         Raises:
-            KeyError if no remediation is registered.
+            KeyError:
+                If no remediation is registered.
         """
 
         remediation = self.get(
@@ -99,10 +128,10 @@ class RemediationRegistry:
             True if removed, otherwise False.
         """
 
-        key = (
-            vendor.lower(),
-            platform.lower(),
-            control_id.upper(),
+        key = self._make_key(
+            vendor=vendor,
+            platform=platform,
+            control_id=control_id,
         )
 
         if key not in self._remediations:
@@ -129,24 +158,27 @@ class RemediationRegistry:
         If platform is provided, only that platform is returned.
         """
 
-        vendor_name = vendor.lower()
+        vendor_name = vendor.strip().lower()
 
         if platform is not None:
-            platform_name = platform.lower()
+            platform_name = platform.strip().lower()
 
             return [
                 remediation
                 for remediation in self._remediations.values()
                 if (
-                    remediation.vendor.lower() == vendor_name
-                    and remediation.platform.lower() == platform_name
+                    remediation.vendor.strip().lower()
+                    == vendor_name
+                    and remediation.platform.strip().lower()
+                    == platform_name
                 )
             ]
 
         return [
             remediation
             for remediation in self._remediations.values()
-            if remediation.vendor.lower() == vendor_name
+            if remediation.vendor.strip().lower()
+            == vendor_name
         ]
 
     def clear(self) -> None:
