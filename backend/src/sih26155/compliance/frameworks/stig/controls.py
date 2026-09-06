@@ -1,81 +1,120 @@
 """
-Vendor-neutral STIG compliance control catalogue.
+DISA STIG compliance control catalogue.
 
-These controls operate on normalized SBM semantic fields.
-Vendor-specific configuration parsing is handled by the
-parser and normalization layer.
+Target:
+    Cisco IOS XE Router NDM STIG
 
-Vendor-specific remediation is maintained separately from
-the compliance control definitions.
+The control IDs are internal SIH26155 project control IDs.
+The STIG reference identifies the applicable STIG requirement.
+
+STIG requirements are platform-specific. Vendor and platform
+information must come from the parser/device context.
 """
 
 
 STIG_CONTROLS = {
-    "SSH-001": {
-        "control_id": "SSH-001",
-        "title": "SSH must use SSHv2",
+    "MGMT-SSH-001": {
+        "control_id": "MGMT-SSH-001",
+        "framework": "STIG",
+        "stig_reference": "CISC-ND-001210",
+        "finding_id": "V-215845",
+        "benchmark": "Cisco IOS XE Router NDM STIG",
+        "title": "Protect remote maintenance sessions",
         "semantic_field": "management.ssh.version",
-        "description": "SSH management access must use SSH version 2.",
-        "category": "Network Access",
+        "description": (
+            "Remote maintenance sessions must use approved "
+            "cryptographic mechanisms."
+        ),
+        "expected": 2,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "MGMT-001": {
-        "control_id": "MGMT-001",
-        "title": "Telnet must be disabled",
+    "MGMT-TELNET-001": {
+        "control_id": "MGMT-TELNET-001",
+        "framework": "STIG",
+        "stig_reference": "CISC-ND-001210",
+        "finding_id": "V-215845",
+        "benchmark": "Cisco IOS XE Router NDM STIG",
+        "title": "Use secure protocols for remote maintenance",
         "semantic_field": "management.telnet.enabled",
-        "description": "Telnet management access must be disabled.",
-        "category": "Network Access",
+        "description": (
+            "Unsecured remote-management protocols such as Telnet "
+            "must not be used where secure alternatives are required."
+        ),
+        "expected": False,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "MGMT-002": {
-        "control_id": "MGMT-002",
-        "title": "HTTP management must be disabled",
+    "MGMT-HTTP-001": {
+        "control_id": "MGMT-HTTP-001",
+        "framework": "STIG",
+        "stig_reference": "CISC-ND-001210",
+        "finding_id": "V-215845",
+        "benchmark": "Cisco IOS XE Router NDM STIG",
+        "title": "Protect remote maintenance sessions",
         "semantic_field": "management.http.enabled",
-        "description": "HTTP management access must be disabled.",
-        "category": "Network Access",
+        "description": (
+            "Unsecured HTTP management must not be used where "
+            "cryptographically protected management is required."
+        ),
+        "expected": False,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "AUTH-001": {
-        "control_id": "AUTH-001",
-        "title": "Login protection must be configured",
+    "AUTH-LOGIN-001": {
+        "control_id": "AUTH-LOGIN-001",
+        "framework": "STIG",
+        "stig_reference": "CISC-ND-001370",
+        "finding_id": "V-215854",
+        "benchmark": "Cisco IOS XE Router NDM STIG",
+        "title": "Use authentication servers for administrative access",
         "semantic_field": "authentication.login_protection.enabled",
-        "description": "Login protection must be configured.",
-        "category": "Identification and Authentication",
-        "severity": "medium",
+        "description": (
+            "Administrative access must use approved authentication "
+            "mechanisms before access is granted."
+        ),
+        "expected": True,
+        "operator": "eq",
+        "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
     "LOG-001": {
         "control_id": "LOG-001",
-        "title": "Security logging must be enabled",
-        "semantic_field": "logging.security.enabled",
-        "description": "Security logging must be enabled.",
-        "category": "Audit and Accountability",
-        "severity": "medium",
+        "framework": "STIG",
+        "stig_reference": "CISC-ND-001450",
+        "finding_id": "V-220139",
+        "benchmark": "Cisco IOS XE Router NDM STIG",
+        "title": "Forward log data to multiple syslog servers",
+        "semantic_field": "logging.enabled",
+        "description": (
+            "The Cisco device must be configured to forward "
+            "security and administrative log data."
+        ),
+        "expected": True,
+        "operator": "eq",
+        "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 }
 
 
 def get_stig_control(control_id: str):
-    """
-    Return a STIG control by its project control ID.
-
-    Args:
-        control_id: Project-level control identifier.
-
-    Returns:
-        Control dictionary if found, otherwise None.
-    """
+    """Return a STIG control by internal project control ID."""
     return STIG_CONTROLS.get(control_id)
 
 
 def get_all_stig_controls():
-    """
-    Return all STIG controls.
-
-    Returns:
-        List of STIG control definitions.
-    """
+    """Return all STIG controls."""
     return list(STIG_CONTROLS.values())
