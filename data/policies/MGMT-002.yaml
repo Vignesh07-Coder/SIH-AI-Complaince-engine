@@ -1,0 +1,26 @@
+control_id: MGMT-002
+name: HTTP management must be disabled
+
+meaning: >
+  Unencrypted HTTP must not be used for administrative management.
+  HTTPS should be used when web-based management is required.
+
+expected_state:
+  http_management_enabled: false
+  https_management_enabled: true
+
+severity: HIGH
+
+evidence_requirements:
+  - HTTP management service configuration
+  - HTTPS management configuration where applicable
+  - Original configuration retained as evidence
+
+framework_mapping:
+  - framework: CIS
+    mapping: Applicable vendor-specific CIS benchmark for secure management
+
+supported_vendors:
+  - Cisco
+  - Juniper
+  - Palo Alto

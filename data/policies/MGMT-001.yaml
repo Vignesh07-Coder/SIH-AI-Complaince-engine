@@ -1,0 +1,26 @@
+control_id: MGMT-001
+name: Telnet must be disabled
+
+meaning: >
+  Telnet must not be used for administrative access because it does not
+  provide encrypted communication.
+
+expected_state:
+  telnet_enabled: false
+  secure_remote_management: true
+
+severity: HIGH
+
+evidence_requirements:
+  - Telnet service or management access configuration
+  - Relevant configuration statement
+  - Original configuration retained as evidence
+
+framework_mapping:
+  - framework: CIS
+    mapping: Applicable vendor-specific CIS benchmark for secure management
+
+supported_vendors:
+  - Cisco
+  - Juniper
+  - Palo Alto

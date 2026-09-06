@@ -1,0 +1,26 @@
+control_id: SSH-001
+name: SSH must use SSHv2
+
+meaning: >
+  Remote administrative access using SSH must use SSH version 2.
+  SSH version 1 must not be permitted.
+
+expected_state:
+  ssh_enabled: true
+  ssh_version: "2"
+
+severity: HIGH
+
+evidence_requirements:
+  - SSH protocol version setting
+  - Relevant configuration statement
+  - Original configuration retained as evidence
+
+framework_mapping:
+  - framework: CIS
+    mapping: Applicable vendor-specific CIS benchmark for SSH configuration
+
+supported_vendors:
+  - Cisco
+  - Juniper
+  - Palo Alto

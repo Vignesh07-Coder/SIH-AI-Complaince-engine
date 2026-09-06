@@ -1,0 +1,25 @@
+control_id: AUTH-001
+name: Login protection must be configured
+
+meaning: >
+  Administrative authentication must include protection against
+  repeated unauthorized login attempts.
+
+expected_state:
+  login_protection_enabled: true
+
+severity: MEDIUM
+
+evidence_requirements:
+  - Login protection configuration
+  - Relevant timeout, lockout, or attempt-limiting settings
+  - Original configuration retained as evidence
+
+framework_mapping:
+  - framework: CIS
+    mapping: Applicable vendor-specific CIS benchmark for authentication
+
+supported_vendors:
+  - Cisco
+  - Juniper
+  - Palo AltoMGMT-002.yaml

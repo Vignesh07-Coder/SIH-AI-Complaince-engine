@@ -1,0 +1,26 @@
+control_id: LOG-001
+name: Security logging must be enabled
+
+meaning: >
+  Security-relevant network-device events must be logged so that
+  security incidents can be detected and investigated.
+
+expected_state:
+  security_logging_enabled: true
+
+severity: MEDIUM
+
+evidence_requirements:
+  - Logging configuration
+  - Log destination configuration where applicable
+  - Relevant event or severity settings
+  - Original configuration retained as evidence
+
+framework_mapping:
+  - framework: CIS
+    mapping: Applicable vendor-specific CIS benchmark for logging
+
+supported_vendors:
+  - Cisco
+  - Juniper
+  - Palo Alto
