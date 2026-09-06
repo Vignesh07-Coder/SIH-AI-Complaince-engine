@@ -1,29 +1,22 @@
 """
-DISA STIG compliance control catalogue.
+STIG compliance control catalogue.
 
-Target:
-    Cisco IOS XE Router NDM STIG
+Vendor-neutral SIH26155 controls mapped to STIG security
+requirements.
 
-The control IDs are internal SIH26155 project control IDs.
-The STIG reference identifies the applicable STIG requirement.
-
-STIG requirements are platform-specific. Vendor and platform
-information must come from the parser/device context.
+Vendor-specific STIG implementation details are handled
+outside this vendor-neutral catalogue.
 """
-
 
 STIG_CONTROLS = {
     "MGMT-SSH-001": {
         "control_id": "MGMT-SSH-001",
         "framework": "STIG",
-        "stig_reference": "CISC-ND-001210",
-        "finding_id": "V-215845",
-        "benchmark": "Cisco IOS XE Router NDM STIG",
-        "title": "Protect remote maintenance sessions",
+        "title": "Secure SSH management",
         "semantic_field": "management.ssh.version",
         "description": (
-            "Remote maintenance sessions must use approved "
-            "cryptographic mechanisms."
+            "Remote management sessions must use approved "
+            "secure mechanisms."
         ),
         "expected": 2,
         "operator": "eq",
@@ -35,14 +28,10 @@ STIG_CONTROLS = {
     "MGMT-TELNET-001": {
         "control_id": "MGMT-TELNET-001",
         "framework": "STIG",
-        "stig_reference": "CISC-ND-001210",
-        "finding_id": "V-215845",
-        "benchmark": "Cisco IOS XE Router NDM STIG",
-        "title": "Use secure protocols for remote maintenance",
+        "title": "Disable Telnet management",
         "semantic_field": "management.telnet.enabled",
         "description": (
-            "Unsecured remote-management protocols such as Telnet "
-            "must not be used where secure alternatives are required."
+            "Insecure Telnet management access must be disabled."
         ),
         "expected": False,
         "operator": "eq",
@@ -54,14 +43,10 @@ STIG_CONTROLS = {
     "MGMT-HTTP-001": {
         "control_id": "MGMT-HTTP-001",
         "framework": "STIG",
-        "stig_reference": "CISC-ND-001210",
-        "finding_id": "V-215845",
-        "benchmark": "Cisco IOS XE Router NDM STIG",
-        "title": "Protect remote maintenance sessions",
+        "title": "Disable insecure HTTP management",
         "semantic_field": "management.http.enabled",
         "description": (
-            "Unsecured HTTP management must not be used where "
-            "cryptographically protected management is required."
+            "Insecure HTTP management access must be disabled."
         ),
         "expected": False,
         "operator": "eq",
@@ -73,14 +58,11 @@ STIG_CONTROLS = {
     "AUTH-LOGIN-001": {
         "control_id": "AUTH-LOGIN-001",
         "framework": "STIG",
-        "stig_reference": "CISC-ND-001370",
-        "finding_id": "V-215854",
-        "benchmark": "Cisco IOS XE Router NDM STIG",
-        "title": "Use authentication servers for administrative access",
+        "title": "Protect management authentication",
         "semantic_field": "authentication.login_protection.enabled",
         "description": (
-            "Administrative access must use approved authentication "
-            "mechanisms before access is granted."
+            "Management login access must use appropriate "
+            "authentication protection."
         ),
         "expected": True,
         "operator": "eq",
@@ -92,14 +74,10 @@ STIG_CONTROLS = {
     "LOG-001": {
         "control_id": "LOG-001",
         "framework": "STIG",
-        "stig_reference": "CISC-ND-001450",
-        "finding_id": "V-220139",
-        "benchmark": "Cisco IOS XE Router NDM STIG",
-        "title": "Forward log data to multiple syslog servers",
+        "title": "Enable security logging",
         "semantic_field": "logging.enabled",
         "description": (
-            "The Cisco device must be configured to forward "
-            "security and administrative log data."
+            "Security-relevant events must be logged."
         ),
         "expected": True,
         "operator": "eq",
@@ -111,10 +89,8 @@ STIG_CONTROLS = {
 
 
 def get_stig_control(control_id: str):
-    """Return a STIG control by internal project control ID."""
     return STIG_CONTROLS.get(control_id)
 
 
 def get_all_stig_controls():
-    """Return all STIG controls."""
     return list(STIG_CONTROLS.values())

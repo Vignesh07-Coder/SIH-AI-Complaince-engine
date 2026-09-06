@@ -1,21 +1,22 @@
 """
 CIS compliance control catalogue.
 
-The control IDs are internal SIH26155 project control IDs.
-Controls operate on vendor-neutral SBM semantic fields.
+Vendor-neutral SIH26155 controls mapped to CIS security
+configuration principles.
 
-Vendor-specific configuration is normalized by the parser
-before compliance evaluation.
+Vendor-specific CIS Benchmarks are handled separately
+through framework/platform mappings.
 """
-
 
 CIS_CONTROLS = {
     "MGMT-SSH-001": {
         "control_id": "MGMT-SSH-001",
         "framework": "CIS",
-        "title": "SSH must use SSHv2",
+        "title": "Use secure SSH management",
         "semantic_field": "management.ssh.version",
-        "description": "SSH management access must use SSH version 2.",
+        "description": (
+            "Management access must use SSH version 2."
+        ),
         "expected": 2,
         "operator": "eq",
         "severity": "high",
@@ -26,9 +27,11 @@ CIS_CONTROLS = {
     "MGMT-TELNET-001": {
         "control_id": "MGMT-TELNET-001",
         "framework": "CIS",
-        "title": "Telnet management must be disabled",
+        "title": "Disable Telnet management",
         "semantic_field": "management.telnet.enabled",
-        "description": "Telnet management access must be disabled.",
+        "description": (
+            "Telnet management access must be disabled."
+        ),
         "expected": False,
         "operator": "eq",
         "severity": "high",
@@ -39,9 +42,11 @@ CIS_CONTROLS = {
     "MGMT-HTTP-001": {
         "control_id": "MGMT-HTTP-001",
         "framework": "CIS",
-        "title": "HTTP management must be disabled",
+        "title": "Disable insecure HTTP management",
         "semantic_field": "management.http.enabled",
-        "description": "HTTP management access must be disabled.",
+        "description": (
+            "Insecure HTTP management access must be disabled."
+        ),
         "expected": False,
         "operator": "eq",
         "severity": "high",
@@ -52,9 +57,11 @@ CIS_CONTROLS = {
     "AUTH-LOGIN-001": {
         "control_id": "AUTH-LOGIN-001",
         "framework": "CIS",
-        "title": "Login protection must be configured",
+        "title": "Enable login protection",
         "semantic_field": "authentication.login_protection.enabled",
-        "description": "Login protection must be configured.",
+        "description": (
+            "Management login protection must be enabled."
+        ),
         "expected": True,
         "operator": "eq",
         "severity": "medium",
@@ -65,9 +72,11 @@ CIS_CONTROLS = {
     "LOG-001": {
         "control_id": "LOG-001",
         "framework": "CIS",
-        "title": "Security logging must be enabled",
+        "title": "Enable security logging",
         "semantic_field": "logging.enabled",
-        "description": "Security logging must be enabled.",
+        "description": (
+            "Security logging must be enabled."
+        ),
         "expected": True,
         "operator": "eq",
         "severity": "medium",
@@ -78,10 +87,8 @@ CIS_CONTROLS = {
 
 
 def get_cis_control(control_id: str):
-    """Return a CIS control by internal project control ID."""
     return CIS_CONTROLS.get(control_id)
 
 
 def get_all_cis_controls():
-    """Return all CIS controls."""
     return list(CIS_CONTROLS.values())
