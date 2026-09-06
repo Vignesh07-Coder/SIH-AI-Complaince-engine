@@ -22,4 +22,4 @@ framework_mapping:
 supported_vendors:
   - Cisco
   - Juniper
-  - Palo AltoMGMT-002.yaml
+  - Palo Alto
