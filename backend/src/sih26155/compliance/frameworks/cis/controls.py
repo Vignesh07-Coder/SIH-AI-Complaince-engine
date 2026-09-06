@@ -1,83 +1,87 @@
 """
-Vendor-neutral CIS compliance control catalogue.
+CIS compliance control catalogue.
 
-These controls operate on normalized SBM semantic fields.
-Vendor-specific configuration parsing is handled by the
-parser and normalization layer.
+The control IDs are internal SIH26155 project control IDs.
+Controls operate on vendor-neutral SBM semantic fields.
 
-The same control can therefore be evaluated for multiple
-vendors such as Cisco, Juniper, and Palo Alto, provided that
-their parsers normalize the relevant configuration into the
-same SBM semantic field.
+Vendor-specific configuration is normalized by the parser
+before compliance evaluation.
 """
 
 
 CIS_CONTROLS = {
-    "SSH-001": {
-        "control_id": "SSH-001",
+    "MGMT-SSH-001": {
+        "control_id": "MGMT-SSH-001",
+        "framework": "CIS",
         "title": "SSH must use SSHv2",
         "semantic_field": "management.ssh.version",
         "description": "SSH management access must use SSH version 2.",
-        "category": "SSH",
+        "expected": 2,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "MGMT-001": {
-        "control_id": "MGMT-001",
-        "title": "Telnet must be disabled",
+    "MGMT-TELNET-001": {
+        "control_id": "MGMT-TELNET-001",
+        "framework": "CIS",
+        "title": "Telnet management must be disabled",
         "semantic_field": "management.telnet.enabled",
         "description": "Telnet management access must be disabled.",
-        "category": "Management",
+        "expected": False,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "MGMT-002": {
-        "control_id": "MGMT-002",
+    "MGMT-HTTP-001": {
+        "control_id": "MGMT-HTTP-001",
+        "framework": "CIS",
         "title": "HTTP management must be disabled",
         "semantic_field": "management.http.enabled",
         "description": "HTTP management access must be disabled.",
-        "category": "Management",
+        "expected": False,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "AUTH-001": {
-        "control_id": "AUTH-001",
+    "AUTH-LOGIN-001": {
+        "control_id": "AUTH-LOGIN-001",
+        "framework": "CIS",
         "title": "Login protection must be configured",
         "semantic_field": "authentication.login_protection.enabled",
         "description": "Login protection must be configured.",
-        "category": "Authentication",
+        "expected": True,
+        "operator": "eq",
         "severity": "medium",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
     "LOG-001": {
         "control_id": "LOG-001",
+        "framework": "CIS",
         "title": "Security logging must be enabled",
-        "semantic_field": "logging.security.enabled",
+        "semantic_field": "logging.enabled",
         "description": "Security logging must be enabled.",
-        "category": "Logging",
+        "expected": True,
+        "operator": "eq",
         "severity": "medium",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 }
 
 
 def get_cis_control(control_id: str):
-    """
-    Return a CIS control by its control ID.
-
-    Args:
-        control_id: Unique CIS control identifier.
-
-    Returns:
-        The control dictionary if found, otherwise None.
-    """
+    """Return a CIS control by internal project control ID."""
     return CIS_CONTROLS.get(control_id)
 
 
 def get_all_cis_controls():
-    """
-    Return all CIS controls.
-
-    Returns:
-        A list containing all CIS control definitions.
-    """
+    """Return all CIS controls."""
     return list(CIS_CONTROLS.values())
