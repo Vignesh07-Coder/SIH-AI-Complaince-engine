@@ -1,81 +1,106 @@
 """
-Vendor-neutral NIST compliance control catalogue.
+NIST compliance control catalogue.
 
-These controls operate on normalized SBM semantic fields.
-Vendor-specific configuration parsing is handled by the
-parser and normalization layer.
+The control IDs are internal SIH26155 project control IDs.
+Controls operate on vendor-neutral SBM semantic fields.
 
-The same normalized security facts can be evaluated across
-different network vendors.
+Official NIST references can be added to the framework
+mapping metadata without changing the SBM contract.
 """
 
 
 NIST_CONTROLS = {
-    "SSH-001": {
-        "control_id": "SSH-001",
-        "title": "SSH must use SSHv2",
+    "MGMT-SSH-001": {
+        "control_id": "MGMT-SSH-001",
+        "framework": "NIST",
+        "nist_reference": "AC-17",
+        "title": "SSH remote access must be secured",
         "semantic_field": "management.ssh.version",
-        "description": "SSH management access must use SSH version 2.",
-        "category": "Access Control",
+        "description": (
+            "Remote access must use an approved secure mechanism."
+        ),
+        "expected": 2,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "MGMT-001": {
-        "control_id": "MGMT-001",
-        "title": "Telnet must be disabled",
+    "MGMT-TELNET-001": {
+        "control_id": "MGMT-TELNET-001",
+        "framework": "NIST",
+        "nist_reference": "AC-17",
+        "title": "Insecure remote access must be disabled",
         "semantic_field": "management.telnet.enabled",
-        "description": "Telnet management access must be disabled.",
-        "category": "Access Control",
+        "description": (
+            "Remote access must be controlled and restricted "
+            "to approved mechanisms."
+        ),
+        "expected": False,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "MGMT-002": {
-        "control_id": "MGMT-002",
-        "title": "HTTP management must be disabled",
+    "MGMT-HTTP-001": {
+        "control_id": "MGMT-HTTP-001",
+        "framework": "NIST",
+        "nist_reference": "AC-17",
+        "title": "Secure remote management access",
         "semantic_field": "management.http.enabled",
-        "description": "HTTP management access must be disabled.",
-        "category": "Access Control",
+        "description": (
+            "Remote management access must use approved "
+            "secure mechanisms."
+        ),
+        "expected": False,
+        "operator": "eq",
         "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
-    "AUTH-001": {
-        "control_id": "AUTH-001",
-        "title": "Login protection must be configured",
+    "AUTH-LOGIN-001": {
+        "control_id": "AUTH-LOGIN-001",
+        "framework": "NIST",
+        "nist_reference": "IA-2",
+        "title": "User identification and authentication",
         "semantic_field": "authentication.login_protection.enabled",
-        "description": "Login protection must be configured.",
-        "category": "Identification and Authentication",
-        "severity": "medium",
+        "description": (
+            "Users must be identified and authenticated before "
+            "being granted access."
+        ),
+        "expected": True,
+        "operator": "eq",
+        "severity": "high",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 
     "LOG-001": {
         "control_id": "LOG-001",
-        "title": "Security logging must be enabled",
-        "semantic_field": "logging.security.enabled",
-        "description": "Security logging must be enabled.",
-        "category": "Audit and Accountability",
+        "framework": "NIST",
+        "nist_reference": "AU-12",
+        "title": "Audit record generation",
+        "semantic_field": "logging.enabled",
+        "description": (
+            "Security-relevant events must generate appropriate "
+            "audit records."
+        ),
+        "expected": True,
+        "operator": "eq",
         "severity": "medium",
+        "evidence_required": True,
+        "remediation_required": True,
     },
 }
 
 
 def get_nist_control(control_id: str):
-    """
-    Return a NIST control by its project control ID.
-
-    Args:
-        control_id: Project-level control identifier.
-
-    Returns:
-        Control dictionary if found, otherwise None.
-    """
+    """Return a NIST control by internal project control ID."""
     return NIST_CONTROLS.get(control_id)
 
 
 def get_all_nist_controls():
-    """
-    Return all NIST controls.
-
-    Returns:
-        List of NIST control definitions.
-    """
+    """Return all NIST controls."""
     return list(NIST_CONTROLS.values())
