@@ -1,4 +1,3 @@
-
 from dataclasses import asdict, dataclass
 from typing import Any, Literal
 
@@ -19,26 +18,12 @@ class Finding:
     expected: Any
     observed: Any
     evidence: list[Any]
-    remediation_required: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
 
 
 class ComplianceEvaluator:
-    """
-    Evaluates normalized SBM values against policy rules.
-
-    Important:
-    This class evaluates semantic values only.
-    It does not parse vendor syntax.
-    It does not execute remediation commands.
-    It does not use AI to make compliance decisions.
-
-    Remediation is identified from the policy rule and can be
-    handled separately by the remediation layer.
-    """
-
     def evaluate_rule(
         self,
         sbm: Any,
@@ -63,7 +48,6 @@ class ComplianceEvaluator:
                 expected=rule.expected,
                 observed=None,
                 evidence=evidence,
-                remediation_required=False,
             )
 
         try:
@@ -81,7 +65,6 @@ class ComplianceEvaluator:
                 expected=rule.expected,
                 observed=observed,
                 evidence=evidence,
-                remediation_required=False,
             )
 
         return Finding(
@@ -92,9 +75,6 @@ class ComplianceEvaluator:
             expected=rule.expected,
             observed=observed,
             evidence=evidence,
-            remediation_required=(
-                rule.remediation_required and not passed
-            ),
         )
 
     def evaluate(
@@ -106,4 +86,3 @@ class ComplianceEvaluator:
             self.evaluate_rule(sbm, rule)
             for rule in policy.rules
         ]
-
