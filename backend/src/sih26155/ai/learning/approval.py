@@ -1,50 +1,101 @@
+from dataclasses import dataclass
+from datetime import datetime, timezone
+
 from sih26155.core.contracts.ai import CandidateMapping
+from sih26155.ai.semantic_mapping.candidate_generator import VALID_SBM_FIELDS
 from sih26155.ai.learning.mapping_store import save_approved_mapping
-from sih26155.ai.learning.versioning import record_version
 
 
-def review_candidate(candidate: CandidateMapping, unknown_text: str, reviewer: str = "unknown") -> bool:
-    """
-    Terminal-based human review: Confirm / Edit / Reject.
-    Returns True if approved (as-is or edited), False if rejected.
-    """
-    print(f"\nField: {candidate.field}")
-    print(f"Value: {candidate.value}")
-    print(f"Confidence: {candidate.confidence}")
-    print(f"Reason: {candidate.reason}")
-
-    if candidate.confidence > 0.9:
-        decision = input("High confidence. Confirm? (y/n): ").strip().lower()
-        if decision == "y":
-            _approve(candidate, candidate.field, candidate.value, unknown_text, reviewer, was_edited=False)
-            return True
-        print("Rejected.")
-        return False
-
-    decision = input("Approve / Edit / Reject? (a/e/r): ").strip().lower()
-
-    if decision == "a":
-        _approve(candidate, candidate.field, candidate.value, unknown_text, reviewer, was_edited=False)
-        return True
-    elif decision == "e":
-        new_field = input(f"Correct field (was '{candidate.field}'): ").strip()
-        new_value = input(f"Correct value (was '{candidate.value}'): ").strip()
-        _approve(candidate, new_field, new_value, unknown_text, reviewer, was_edited=True)
-        return True
-
-    print("Rejected.")
-    return False
+@dataclass
+class ApprovalResult:
+    status: str  # "approved", "approved_edited", "rejected"
+    field: str | None
+    value: object | None
+    original_candidate: CandidateMapping
+    error: str | None = None
 
 
-def _approve(candidate, field, value, unknown_text, reviewer, was_edited):
+def confirm_candidate(
+    candidate: CandidateMapping,
+    unknown_text: str,
+    context: str,
+    approved_by: str,
+) -> ApprovalResult:
+    """Approve a candidate exactly as the AI proposed it."""
+    return _finalize(
+        candidate=candidate,
+        field=candidate.field,
+        value=candidate.value,
+        unknown_text=unknown_text,
+        context=context,
+        approved_by=approved_by,
+        status="approved",
+    )
+
+
+def edit_candidate(
+    candidate: CandidateMapping,
+    unknown_text: str,
+    context: str,
+    approved_by: str,
+    corrected_field: str,
+    corrected_value: object,
+) -> ApprovalResult:
+    """Approve a candidate after a human correction to field and/or value."""
+    if corrected_field not in VALID_SBM_FIELDS:
+        return ApprovalResult(
+            status="rejected",
+            field=None,
+            value=None,
+            original_candidate=candidate,
+            error=f"'{corrected_field}' is not a valid SBM field.",
+        )
+
+    return _finalize(
+        candidate=candidate,
+        field=corrected_field,
+        value=corrected_value,
+        unknown_text=unknown_text,
+        context=context,
+        approved_by=approved_by,
+        status="approved_edited",
+    )
+
+
+def reject_candidate(candidate: CandidateMapping) -> ApprovalResult:
+    """Reject a candidate outright. Nothing is persisted."""
+    return ApprovalResult(
+        status="rejected",
+        field=None,
+        value=None,
+        original_candidate=candidate,
+    )
+
+
+def _finalize(
+    candidate: CandidateMapping,
+    field: str,
+    value: object,
+    unknown_text: str,
+    context: str,
+    approved_by: str,
+    status: str,
+) -> ApprovalResult:
     mapping = {
         "source_text": unknown_text,
         "field": field,
         "value": value,
         "confidence": candidate.confidence,
-        "status": "approved_edited" if was_edited else "approved",
-        "approved_by": reviewer,
+        "status": status,
+        "approved_by": approved_by,
+        "context": context,
+        "created_at": datetime.now(timezone.utc).isoformat(),
     }
     save_approved_mapping(mapping)
-    record_version(field.replace(".", "_"), mapping)
-    print("Saved.")
+
+    return ApprovalResult(
+        status=status,
+        field=field,
+        value=value,
+        original_candidate=candidate,
+    )

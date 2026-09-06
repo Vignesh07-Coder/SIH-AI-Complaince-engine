@@ -6,7 +6,8 @@ def _cosine_similarity(a, b) -> float:
     denom = np.linalg.norm(a) * np.linalg.norm(b)
     if denom == 0:
         return 0.0
-    return float(np.dot(a, b) / denom)
+    score = float(np.dot(a, b) / denom)
+    return max(0.0, min(1.0, score))  # clamp to [0, 1] per spec
 
 
 class Retriever:
