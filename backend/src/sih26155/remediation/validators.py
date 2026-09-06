@@ -5,16 +5,16 @@ from .models import Remediation
 
 class RemediationValidationError(ValueError):
     """
-    Raised when a remediation command fails validation.
+    Raised when a remediation record fails validation.
     """
 
 
 class RemediationValidator:
     """
-    Validates remediation records before they are used.
+    Validates remediation records before they are registered.
 
     This validator performs structural and safety checks.
-    It does not execute commands.
+    It never executes commands.
     """
 
     CONTROL_ID_PATTERN = re.compile(
@@ -34,7 +34,7 @@ class RemediationValidator:
         "mikrotik",
     }
 
-    DANGEROUS_PATTERNS = [
+    DANGEROUS_PATTERNS = (
         r"\breload\b",
         r"\breboot\b",
         r"\bwrite\s+erase\b",
@@ -44,7 +44,7 @@ class RemediationValidator:
         r"\bdelete\s+\/recursive\b",
         r"\bshutdown\b",
         r"\bpoweroff\b",
-    ]
+    )
 
     @classmethod
     def validate(cls, remediation: Remediation) -> None:
@@ -53,8 +53,13 @@ class RemediationValidator:
 
         Raises:
             RemediationValidationError:
-                if validation fails.
+                If validation fails.
         """
+
+        if not isinstance(remediation, Remediation):
+            raise RemediationValidationError(
+                "Expected a Remediation instance."
+            )
 
         cls._validate_vendor(remediation)
         cls._validate_platform(remediation)
@@ -80,6 +85,9 @@ class RemediationValidator:
         cls,
         remediation: Remediation,
     ) -> None:
+        """
+        Validate vendor name.
+        """
 
         vendor = remediation.vendor.strip().lower()
 
@@ -97,6 +105,9 @@ class RemediationValidator:
     def _validate_platform(
         remediation: Remediation,
     ) -> None:
+        """
+        Validate platform name.
+        """
 
         platform = remediation.platform.strip()
 
@@ -110,6 +121,9 @@ class RemediationValidator:
         cls,
         remediation: Remediation,
     ) -> None:
+        """
+        Validate compliance control ID.
+        """
 
         control_id = remediation.control_id.strip().upper()
 
@@ -128,6 +142,12 @@ class RemediationValidator:
         cls,
         remediation: Remediation,
     ) -> None:
+        """
+        Validate remediation command.
+
+        Commands are checked for empty values and
+        potentially destructive operations.
+        """
 
         command = remediation.command.strip()
 
@@ -151,6 +171,9 @@ class RemediationValidator:
     def _validate_description(
         remediation: Remediation,
     ) -> None:
+        """
+        Validate remediation description.
+        """
 
         if not remediation.description.strip():
             raise RemediationValidationError(
