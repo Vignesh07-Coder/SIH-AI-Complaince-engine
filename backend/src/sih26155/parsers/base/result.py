@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 
-from sih26155.core.evidence.models import Evidence
-from sih26155.core.facts.models import SecurityFact
+from sih26155.core.core_contracts import Evidence, SecurityFact
 
 
 @dataclass

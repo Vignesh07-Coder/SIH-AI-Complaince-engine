@@ -1,6 +1,6 @@
 from typing import Protocol
 
-from sih26155.core.facts.models import SecurityFact
+from sih26155.core.core_contracts import SecurityFact
 
 
 class ParseResult:
