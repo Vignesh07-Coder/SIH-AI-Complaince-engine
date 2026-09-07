@@ -1,17 +1,22 @@
 """
 STIG compliance control catalogue.
 
-Vendor-neutral SIH26155 controls mapped to STIG security
-requirements.
+STIG identifiers are vendor/product/version specific.
 
-Vendor-specific STIG implementation details are handled
-outside this vendor-neutral catalogue.
+SIH26155 therefore keeps vendor-neutral internal controls here
+and does NOT invent generic V-xxxxx identifiers.
+
+The exact DISA STIG rule must be selected through the
+vendor/platform/STIG-version mapping layer.
 """
 
 STIG_CONTROLS = {
     "MGMT-SSH-001": {
         "control_id": "MGMT-SSH-001",
         "framework": "STIG",
+        "framework_version": "vendor/platform specific",
+        "framework_references": [],
+        "stig_mapping_required": True,
         "title": "Secure SSH management",
         "semantic_field": "management.ssh.version",
         "description": (
@@ -28,6 +33,9 @@ STIG_CONTROLS = {
     "MGMT-TELNET-001": {
         "control_id": "MGMT-TELNET-001",
         "framework": "STIG",
+        "framework_version": "vendor/platform specific",
+        "framework_references": [],
+        "stig_mapping_required": True,
         "title": "Disable Telnet management",
         "semantic_field": "management.telnet.enabled",
         "description": (
@@ -43,6 +51,9 @@ STIG_CONTROLS = {
     "MGMT-HTTP-001": {
         "control_id": "MGMT-HTTP-001",
         "framework": "STIG",
+        "framework_version": "vendor/platform specific",
+        "framework_references": [],
+        "stig_mapping_required": True,
         "title": "Disable insecure HTTP management",
         "semantic_field": "management.http.enabled",
         "description": (
@@ -58,6 +69,9 @@ STIG_CONTROLS = {
     "AUTH-LOGIN-001": {
         "control_id": "AUTH-LOGIN-001",
         "framework": "STIG",
+        "framework_version": "vendor/platform specific",
+        "framework_references": [],
+        "stig_mapping_required": True,
         "title": "Protect management authentication",
         "semantic_field": "authentication.login_protection.enabled",
         "description": (
@@ -74,6 +88,9 @@ STIG_CONTROLS = {
     "LOG-001": {
         "control_id": "LOG-001",
         "framework": "STIG",
+        "framework_version": "vendor/platform specific",
+        "framework_references": [],
+        "stig_mapping_required": True,
         "title": "Enable security logging",
         "semantic_field": "logging.enabled",
         "description": (
