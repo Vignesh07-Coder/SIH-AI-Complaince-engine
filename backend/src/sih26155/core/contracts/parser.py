@@ -9,22 +9,16 @@ class ParseResult:
         self,
         facts: list[SecurityFact],
         evidence: list[Evidence],
-        unknown_lines: list[str],
+        unknown_lines: list[str] | None = None,
     ):
         self.facts = facts
         self.evidence = evidence
-        self.unknown_lines = unknown_lines
+        self.unknown_lines = unknown_lines or []
 
 
 class VendorParser(Protocol):
-
-    @property
-    def name(self) -> str:
+    def parse(self, config: str, source_file: str) -> ParseResult:
         ...
 
-    def parse(
-        self,
-        config: str,
-        source_file: str,
-    ) -> ParseResult:
-        ...
+
+Parser = VendorParser
