@@ -15,3 +15,8 @@ class AnalysisResponse(BaseModel):
     baseline: dict[str, Any]
     findings: list[dict[str, Any]]
     remediations: list[dict[str, Any]]
+
+
+class ReportRequest(BaseModel):
+    source_file: str = Field(default="uploaded-config.cfg")
+    analysis: AnalysisResponse

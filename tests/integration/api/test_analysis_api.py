@@ -54,3 +54,30 @@ def test_analysis_endpoint_runs_full_pipeline():
     assert len(remediations) == 1
     assert remediations[0]["control_id"] == "MGMT-HTTP-001"
     assert remediations[0]["command"] == "no ip http server"
+
+
+def test_report_endpoint_generates_pdf_from_analysis_result():
+    config = Path("data/configs/cisco/test.conf").read_text(encoding="utf-8")
+    analysis_response = client.post(
+        "/api/analysis",
+        json={
+            "config": config,
+            "source_file": "test.conf",
+        },
+    )
+
+    response = client.post(
+        "/api/reports",
+        json={
+            "source_file": "test.conf",
+            "analysis": analysis_response.json(),
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/pdf"
+    assert response.headers["content-disposition"] == (
+        'attachment; filename="test-compliance-report.pdf"'
+    )
+    assert response.content.startswith(b"%PDF")
+    assert len(response.content) > 1000
